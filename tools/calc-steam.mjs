@@ -1,26 +1,29 @@
 #!/usr/bin/env node
 /**
- * calc-vapor.mjs — Dimensionamento de tubulação de vapor / steam pipe sizing
+ * calc-steam.mjs — Steam pipe sizing
  *
- * Cadeia de cálculo:
- *   Qv = m/rho  ->  D = sqrt(4*Qv/(pi*V))  ->  escolha do DN (Schedule 40)
- *   ->  V real  ->  Re  ->  f (Swamee-Jain)  ->  hf (Darcy-Weisbach)
- *   ->  h_loc (Sum K)  ->  dP total  ->  verificações
+ * Calculation chain:
+ *   Qv = m/rho  ->  D = sqrt(4*Qv/(pi*V))  ->  DN selection (Schedule 40)
+ *   ->  actual V  ->  Re  ->  f (Swamee-Jain)  ->  hf (Darcy-Weisbach)
+ *   ->  h_loc (Sum K)  ->  total dP  ->  checks
  *
- * Unidades SI internas. Entrada em unidades de campo.
- * Sem dependências externas.
+ * Internal SI units. Input in field units.
+ * No external dependencies.
  *
- * Idioma / language: --lang <en|pt|es> (default: en; aceita --lang pt ou --lang=pt)
+ * Language: --lang <en|pt|es> (default: en; accepts --lang pt or --lang=pt).
+ * Available languages: en = English, pt = Portuguese, es = Spanish.
+ * Numbers are ALWAYS displayed in English format (decimal point, comma
+ * thousands separator) regardless of --lang; only the labels are translated.
  *
- * Uso:
- *   node calc-vapor.mjs --m 2500 --rho 4.81 --mu 1.34e-5 --L 45 --eps 0.045 --K 14.1
- *   node calc-vapor.mjs --m 2500 --rho 4.81 --L 45 --K 14.1 --D 77.9 --V 30 --lang pt
- *   node calc-vapor.mjs --help
+ * Usage:
+ *   node tools/calc-steam.mjs --m 2500 --rho 4.81 --mu 1.34e-5 --L 45 --eps 0.045 --K 14.1
+ *   node tools/calc-steam.mjs --m 2500 --rho 4.81 --L 45 --K 14.1 --D 77.9 --V 30 --lang pt
+ *   node tools/calc-steam.mjs --help
  */
 
 const G = 9.80665;
 
-/** Diâmetros internos Schedule 40 (ASME B36.10M), mm. */
+/** Schedule 40 internal diameters (ASME B36.10M), mm. */
 const SCH40 = [
   { dn: 'DN15 (1/2")', id: 15.8 },
   { dn: 'DN20 (3/4")', id: 20.9 },
@@ -39,13 +42,13 @@ const SCH40 = [
 ];
 
 /* ------------------------------------------------------------------ *
- * i18n — dicionário único de rótulos (labels only; no numbers/units). *
+ * i18n — single label dictionary (labels only; no numbers/units).    *
  * ------------------------------------------------------------------ */
 
 const LANGS = ['en', 'pt', 'es'];
 
 const T = {
-  // Seções
+  // Sections
   sec1: {
     en: 'Volumetric flow rate',
     pt: 'Vazão volumétrica',
@@ -87,7 +90,7 @@ const T = {
     es: 'Verificaciones',
   },
 
-  // Rótulos de campo
+  // Field labels
   vDesign: { en: 'Design V', pt: 'V de projeto', es: 'V de diseño' },
   dnAdopted: { en: 'DN adopted', pt: 'DN adotado', es: 'DN adoptado' },
   dInternal: { en: 'Internal D', pt: 'D interno', es: 'D interno' },
@@ -109,7 +112,7 @@ const T = {
     es: 'Velocidad del sonido aprox. (con k=1,3; T=175C)',
   },
 
-  // Palavras / resultados
+  // Words / results
   forced: { en: 'forced', pt: 'forçado', es: 'forzado' },
   laminar: { en: 'LAMINAR', pt: 'LAMINAR', es: 'LAMINAR' },
   transition: { en: 'TRANSITION', pt: 'TRANSIÇÃO', es: 'TRANSICIÓN' },
@@ -123,7 +126,7 @@ const T = {
     es: 'ATENCIÓN: flujo compresible',
   },
 
-  // Erros
+  // Errors
   errRequired: {
     en: 'Error: --m, --rho and --L are required. Use --help.',
     pt: 'Erro: --m, --rho e --L são obrigatórios. Use --help.',
@@ -138,10 +141,10 @@ const T = {
 
 let lang = 'en';
 
-/** Traduz uma chave do dicionário para o idioma selecionado. */
+/** Translates a dictionary key into the selected language. */
 const t = (key) => T[key][lang];
 
-/** Normaliza o valor recebido em --lang; devolve null se for inválido. */
+/** Normalizes the value received in --lang; returns null when it is invalid. */
 function normLang(value) {
   if (value === undefined || value === true || value === null) return 'en';
   const s = String(value).toLowerCase();
@@ -169,16 +172,16 @@ function parseArgs(argv) {
   return out;
 }
 
-/** Fator de atrito — Swamee-Jain (explícita).
- *  Válida para 5e3 < Re < 1e8 e 1e-6 < eps/D < 1e-2.
- *  f = 0,25 / [ log10( eps/(3,7D) + 5,74/Re^0,9 ) ]^2 */
+/** Friction factor — Swamee-Jain (explicit).
+ *  Valid for 5e3 < Re < 1e8 and 1e-6 < eps/D < 1e-2.
+ *  f = 0.25 / [ log10( eps/(3.7D) + 5.74/Re^0.9 ) ]^2 */
 function swameeJain(Re, epsD) {
   const t = Math.log10(epsD / 3.7 + 5.74 / Math.pow(Re, 0.9));
   return 0.25 / (t * t);
 }
 
-/** Fator de atrito — Colebrook-White (implícita, resolvida por ponto fixo).
- *  1/sqrt(f) = -2 log10( eps/(3,7D) + 2,51/(Re sqrt(f)) ) */
+/** Friction factor — Colebrook-White (implicit, solved by fixed-point iteration).
+ *  1/sqrt(f) = -2 log10( eps/(3.7D) + 2.51/(Re sqrt(f)) ) */
 function colebrook(Re, epsD, tol = 1e-12, maxIter = 200) {
   let f = swameeJain(Re, epsD);
   for (let i = 0; i < maxIter; i++) {
@@ -190,47 +193,49 @@ function colebrook(Re, epsD, tol = 1e-12, maxIter = 200) {
   return f;
 }
 
-/** Haaland (explícita, boa estimativa inicial).
- *  1/sqrt(f) = -1,8 log10[ (eps/(3,7D))^1,11 + 6,9/Re ] */
+/** Haaland (explicit, good initial estimate).
+ *  1/sqrt(f) = -1.8 log10[ (eps/(3.7D))^1.11 + 6.9/Re ] */
 function haaland(Re, epsD) {
   const t = -1.8 * Math.log10(Math.pow(epsD / 3.7, 1.11) + 6.9 / Re);
   return 1 / (t * t);
 }
 
-/** Locale de exibição numérica por idioma: en usa ponto decimal; pt e es usam vírgula. */
-const LOCALE = { en: 'en-US', pt: 'pt-BR', es: 'es-ES' };
-
-/** Formata com o separador decimal do idioma selecionado. Só a apresentação muda —
- *  os valores calculados são idênticos nos três idiomas. */
-const fmt = (x, n = 3) => Number(x).toLocaleString(LOCALE[lang] ?? 'en-US', {
+/** Numeric display format: always en-US (decimal point, comma thousands
+ *  separator), in every language. Only the labels change with --lang;
+ *  the computed values are identical in all three languages. */
+const fmt = (x, n = 3) => Number(x).toLocaleString('en-US', {
   minimumFractionDigits: n, maximumFractionDigits: n,
 });
 
-/** Linha "rótulo = valor", alinhada. */
+/** Aligned "label = value" line. */
 const kv = (label, value) => console.log(`${String(label).padEnd(20)} = ${value}`);
 
 function reportHelp() {
   console.log(`
-calc-vapor.mjs — dimensionamento de tubulação de vapor (SI interno, entrada de campo)
+calc-steam.mjs — steam pipe sizing (internal SI units, field-unit input)
 
-OBRIGATÓRIOS
-  --m <kg/h>        vazão de massa de vapor
-  --rho <kg/m3>     massa específica do vapor na condição de operação
-  --L <m>           comprimento reto total da linha
+REQUIRED
+  --m <kg/h>        steam mass flow rate
+  --rho <kg/m3>     steam density at operating conditions
+  --L <m>           total straight length of the line
 
-OPCIONAIS
-  --mu <Pa.s>       viscosidade dinâmica         (default 1,34e-5)
-  --eps <mm>        rugosidade absoluta          (default 0,045 = aço-carbono)
-  --K <adim>        soma dos coeficientes K      (default 0)
-  --V <m/s>         velocidade de projeto        (default 30; usado p/ achar D)
-  --D <mm>          força um diâmetro interno    (pula a escolha do DN)
-  --Pabs <bar>      pressão absoluta de operação (habilita checagem de dP%)
-  --purg <kg/h>     vazão de purga/derivação a somar na linha principal
-  --lang <en|pt|es> idioma das mensagens         (default en; aceita --lang=pt)
-                    output language              (default en; also --lang=en)
+OPTIONAL
+  --mu <Pa.s>       dynamic viscosity               (default 1.34e-5)
+  --eps <mm>        absolute roughness              (default 0.045 = carbon steel)
+  --K <adim>        sum of the K coefficients       (default 0)
+  --V <m/s>         design velocity                 (default 30; used to size D)
+  --D <mm>          forces an internal diameter     (skips DN selection)
+  --Pabs <bar>      absolute operating pressure     (enables the dP% check)
+  --purg <kg/h>     purge/branch flow to add to the main line
+  --lang <en|pt|es> output language                 (default en; accepts --lang=pt)
 
-EXEMPLO
-  node calc-vapor.mjs --m 2500 --rho 4.81 --mu 1.34e-5 --L 45 --eps 0.045 --K 14.1 --Pabs 9.013
+LANGUAGES
+  en = English, pt = Portuguese, es = Spanish.
+  Numbers are always printed in English format (decimal point, comma thousands
+  separator) in all three languages; only the labels are translated.
+
+EXAMPLE
+  node tools/calc-steam.mjs --m 2500 --rho 4.81 --mu 1.34e-5 --L 45 --eps 0.045 --K 14.1 --Pabs 9.013
 `);
 }
 
@@ -343,7 +348,7 @@ function main() {
   kv(t('mca'), `${fmt(dP / (1000 * G), 3)} mca  ${t('mcaWarn')}`);
 
   console.log(`\n=== 8. ${t('sec8')} ===`);
-  const Ve = 100 / Math.sqrt(rho); // API RP 14E, C=100 servico continuo
+  const Ve = 100 / Math.sqrt(rho); // API RP 14E, C=100 continuous service
   kv(t('erosion'), `V_max = ${fmt(Ve, 1)} m/s -> ${V <= Ve ? t('ok') : t('fail')}`);
   const aSonic = Math.sqrt(1.3 * 461.5 * (273.15 + 175));
   kv(t('sonic'), `${fmt(aSonic, 0)} m/s`);

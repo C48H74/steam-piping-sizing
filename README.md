@@ -1,4 +1,4 @@
-# dimensionamento-tubulacao-vapor
+# steam-piping-sizing
 
 **Languages:** English · [Português (BR)](#português-br) · [Español](#español)
 
@@ -13,9 +13,9 @@ Una skill de agente trilingüe para **dimensionar y verificar tubería de vapor*
 | Content | English | Português (BR) | Español |
 |---|---|---|---|
 | Skill | [`SKILL.md`](SKILL.md) | [`SKILL.pt-BR.md`](SKILL.pt-BR.md) | [`SKILL.es.md`](SKILL.es.md) |
-| Reference tables | [`references/tables.en.md`](references/tables.en.md) | [`references/tabelas.pt-BR.md`](references/tabelas.pt-BR.md) | [`references/tablas.es.md`](references/tablas.es.md) |
+| Reference tables | [`references/tables.en.md`](references/tables.en.md) | [`references/tables.pt-BR.md`](references/tables.pt-BR.md) | [`references/tables.es.md`](references/tables.es.md) |
 | Worked example | [`examples/steam-8bar-2500kgh.en.md`](examples/steam-8bar-2500kgh.en.md) | [`examples/steam-8bar-2500kgh.pt-BR.md`](examples/steam-8bar-2500kgh.pt-BR.md) | [`examples/steam-8bar-2500kgh.es.md`](examples/steam-8bar-2500kgh.es.md) |
-| Calculator | `tools/calc-vapor.mjs` — one file, all languages via `--lang en\|pt\|es` | | |
+| Calculator | `tools/calc-steam.mjs` — one file, all languages via `--lang en\|pt\|es` | | |
 
 The three skill documents are **equivalent translations**: same frameworks, same numbers, same tables. Read whichever you prefer; the calculator serves all three.
 
@@ -30,14 +30,14 @@ A 10-step steam-pipe sizing procedure (system data → steam properties → volu
 ### Install as a skill
 
 ```bash
-git clone https://github.com/C48H74/dimensionamento-tubulacao-vapor.git \
-  ~/.agents/skills/dimensionamento-tubulacao-vapor
+git clone https://github.com/C48H74/steam-piping-sizing.git \
+  ~/.agents/skills/steam-piping-sizing
 ```
 
 Windows:
 
 ```powershell
-git clone https://github.com/C48H74/dimensionamento-tubulacao-vapor.git "$env:USERPROFILE\.agents\skills\dimensionamento-tubulacao-vapor"
+git clone https://github.com/C48H74/steam-piping-sizing.git "$env:USERPROFILE\.agents\skills\steam-piping-sizing"
 ```
 
 Then ask your agent something like *"size the steam line: 2,500 kg/h at 8 bar(g), 45 m, 6 long-radius elbows, 2 gate valves, 1 control valve, 1 Y-strainer and 1 moisture separator."*
@@ -45,7 +45,7 @@ Then ask your agent something like *"size the steam line: 2,500 kg/h at 8 bar(g)
 ### Use the calculator
 
 ```bash
-node tools/calc-vapor.mjs --lang en --m 2500 --rho 4.81 --mu 1.34e-5 --L 45 --eps 0.045 --K 14.1 --Pabs 9.013
+node tools/calc-steam.mjs --lang en --m 2500 --rho 4.81 --mu 1.34e-5 --L 45 --eps 0.045 --K 14.1 --Pabs 9.013
 ```
 
 `--lang` accepts `en` (default), `pt` or `es` and changes only the labels — the numbers are identical in all three.
@@ -53,7 +53,7 @@ node tools/calc-vapor.mjs --lang en --m 2500 --rho 4.81 --mu 1.34e-5 --L 45 --ep
 To force a known diameter (and reproduce an existing case), pass `--D` in mm:
 
 ```bash
-node tools/calc-vapor.mjs --m 2500 --rho 4.81 --L 45 --K 14.1 --Pabs 9.013 --D 77.9
+node tools/calc-steam.mjs --m 2500 --rho 4.81 --L 45 --K 14.1 --Pabs 9.013 --D 77.9
 ```
 
 Run with `--help` for every option. Density is **never** computed from P and T on purpose: take it from a steam table (`references/tables.en.md`).
@@ -77,15 +77,15 @@ Um procedimento de dimensionamento de linha de vapor em 10 etapas (dados do sist
 ### Instalar como skill
 
 ```powershell
-git clone https://github.com/C48H74/dimensionamento-tubulacao-vapor.git "$env:USERPROFILE\.agents\skills\dimensionamento-tubulacao-vapor"
+git clone https://github.com/C48H74/steam-piping-sizing.git "$env:USERPROFILE\.agents\skills\steam-piping-sizing"
 ```
 
-Depois peça ao agente algo como *"dimensione a linha de vapor: 2.500 kg/h a 8 bar(g), 45 m, 6 curvas de raio longo, 2 gavetas, 1 válvula de controle, 1 filtro Y e 1 separador de umidade"*.
+Depois peça ao agente algo como *"dimensione a linha de vapor: 2,500 kg/h a 8 bar(g), 45 m, 6 curvas de raio longo, 2 gavetas, 1 válvula de controle, 1 filtro Y e 1 separador de umidade"*.
 
 ### Usar a calculadora
 
 ```bash
-node tools/calc-vapor.mjs --lang pt --m 2500 --rho 4.81 --mu 1.34e-5 --L 45 --eps 0.045 --K 14.1 --Pabs 9.013
+node tools/calc-steam.mjs --lang pt --m 2500 --rho 4.81 --mu 1.34e-5 --L 45 --eps 0.045 --K 14.1 --Pabs 9.013
 ```
 
 `--lang` aceita `en` (padrão), `pt` ou `es` e altera apenas os rótulos — os números são idênticos nos três.
@@ -93,14 +93,14 @@ node tools/calc-vapor.mjs --lang pt --m 2500 --rho 4.81 --mu 1.34e-5 --L 45 --ep
 Para forçar um diâmetro conhecido (e reproduzir um caso existente), use `--D` em mm:
 
 ```bash
-node tools/calc-vapor.mjs --m 2500 --rho 4.81 --L 45 --K 14.1 --Pabs 9.013 --D 77.9
+node tools/calc-steam.mjs --m 2500 --rho 4.81 --L 45 --K 14.1 --Pabs 9.013 --D 77.9
 ```
 
-`--help` lista todas as opções. A massa específica **não** é calculada a partir de P e T de propósito: ela deve vir de tabela de vapor (`references/tabelas.pt-BR.md`).
+`--help` lista todas as opções. A massa específica **não** é calculada a partir de P e T de propósito: ela deve vir de tabela de vapor (`references/tables.pt-BR.md`).
 
 ### Escopo e limites
 
-Regime permanente, escoamento incompressível (Ma < 0,3), fluido newtoniano, seção circular constante.
+Regime permanente, escoamento incompressível (Ma < 0.3), fluido newtoniano, seção circular constante.
 
 **Não** cobre: análise de flexibilidade e reações em bocais; espessura de parede e classes de pressão (ASME B31.3); dimensionamento de purgadores; isolamento térmico e traçamento; dimensionamento de válvula de controle por Cv; escoamento bifásico e flash de condensado; transientes e golpe de aríete.
 
@@ -117,22 +117,22 @@ Un procedimiento de dimensionamiento de línea de vapor en 10 pasos (datos del s
 ### Instalar como skill
 
 ```bash
-git clone https://github.com/C48H74/dimensionamento-tubulacao-vapor.git \
-  ~/.agents/skills/dimensionamento-tubulacao-vapor
+git clone https://github.com/C48H74/steam-piping-sizing.git \
+  ~/.agents/skills/steam-piping-sizing
 ```
 
 Windows:
 
 ```powershell
-git clone https://github.com/C48H74/dimensionamento-tubulacao-vapor.git "$env:USERPROFILE\.agents\skills\dimensionamento-tubulacao-vapor"
+git clone https://github.com/C48H74/steam-piping-sizing.git "$env:USERPROFILE\.agents\skills\steam-piping-sizing"
 ```
 
-Luego pida a su agente algo como *"dimensiona la línea de vapor: 2.500 kg/h a 8 bar(g), 45 m, 6 codos de radio largo, 2 válvulas de compuerta, 1 válvula de control, 1 filtro Y y 1 separador de humedad"*.
+Luego pida a su agente algo como *"dimensiona la línea de vapor: 2,500 kg/h a 8 bar(g), 45 m, 6 codos de radio largo, 2 válvulas de compuerta, 1 válvula de control, 1 filtro Y y 1 separador de humedad"*.
 
 ### Usar la calculadora
 
 ```bash
-node tools/calc-vapor.mjs --lang es --m 2500 --rho 4.81 --mu 1.34e-5 --L 45 --eps 0.045 --K 14.1 --Pabs 9.013
+node tools/calc-steam.mjs --lang es --m 2500 --rho 4.81 --mu 1.34e-5 --L 45 --eps 0.045 --K 14.1 --Pabs 9.013
 ```
 
 `--lang` acepta `en` (por defecto), `pt` o `es` y cambia solo las etiquetas — los números son idénticos en los tres.
@@ -140,14 +140,14 @@ node tools/calc-vapor.mjs --lang es --m 2500 --rho 4.81 --mu 1.34e-5 --L 45 --ep
 Para forzar un diámetro conocido (y reproducir un caso existente), use `--D` en mm:
 
 ```bash
-node tools/calc-vapor.mjs --m 2500 --rho 4.81 --L 45 --K 14.1 --Pabs 9.013 --D 77.9
+node tools/calc-steam.mjs --m 2500 --rho 4.81 --L 45 --K 14.1 --Pabs 9.013 --D 77.9
 ```
 
-`--help` lista todas las opciones. La densidad **no** se calcula a partir de P y T a propósito: debe tomarse de una tabla de vapor (`references/tablas.es.md`).
+`--help` lista todas las opciones. La densidad **no** se calcula a partir de P y T a propósito: debe tomarse de una tabla de vapor (`references/tables.es.md`).
 
 ### Alcance y límites
 
-Régimen permanente, flujo incompresible (Ma < 0,3), fluido newtoniano, sección circular constante.
+Régimen permanente, flujo incompresible (Ma < 0.3), fluido newtoniano, sección circular constante.
 
 **No** cubre: análisis de flexibilidad y reacciones en boquillas; espesor de pared y clases de presión (ASME B31.3); dimensionamiento de purgadores; aislamiento térmico y trazado; dimensionamiento de válvula de control por Cv; flujo bifásico y flash de condensado; transitorios y golpe de ariete.
 

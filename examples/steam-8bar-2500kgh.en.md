@@ -2,7 +2,7 @@
 
 **Languages:** English · [Português (BR)](steam-8bar-2500kgh.pt-BR.md) · [Español](steam-8bar-2500kgh.es.md)
 
-Reference case from the original sheet of this procedure, **recalculated** with the tool `tools/calc-vapor.mjs`. All the numbers below come from the same calculation chain and are reproducible.
+Reference case from the original sheet of this procedure, **recalculated** with the tool `tools/calc-steam.mjs`. All the numbers below come from the same calculation chain and are reproducible.
 
 ## System data
 
@@ -153,7 +153,7 @@ The **engineering conclusion coincides** (DN80 / 3" is adequate, ΔP in the orde
 ## Reproduce
 
 ```bash
-node tools/calc-vapor.mjs --m 2500 --rho 4.81 --mu 1.34e-5 --L 45 --eps 0.045 --K 14.1 --Pabs 9.013 --D 77.9 --lang en
+node tools/calc-steam.mjs --m 2500 --rho 4.81 --mu 1.34e-5 --L 45 --eps 0.045 --K 14.1 --Pabs 9.013 --D 77.9 --lang en
 ```
 
 Without `--D`, the tool chooses the smallest Schedule 40 DN with ID ≥ required D and recalculates the actual velocity.

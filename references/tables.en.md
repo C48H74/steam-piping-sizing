@@ -1,6 +1,6 @@
 # Reference tables — steam, pipe, roughness and fittings
 
-**Languages:** English · [Português (BR)](tabelas.pt-BR.md) · [Español](tablas.es.md)
+**Languages:** English · [Português (BR)](tables.pt-BR.md) · [Español](tables.es.md)
 
 Usual design values. **Always confirm** against the project specification and the applicable standard before issuing a document.
 
