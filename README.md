@@ -1,4 +1,6 @@
-# dimensionamento-tubulacao-vapor
+# Steam Piping Sizing
+
+![Steam piping sizing cover showing a boiler, valves, strainer, moisture separator and expansion loop](assets/images/steam-piping-sizing-cover.png)
 
 **Languages:** English · [Português (BR)](#português-br) · [Español](#español)
 
@@ -7,6 +9,18 @@ A trilingual agent skill for **sizing and verifying steam piping**: diameter fro
 Uma skill de agente trilíngue para **dimensionar e verificar tubulação de vapor**: diâmetro por velocidade, Reynolds, fator de atrito, perda distribuída de Darcy-Weisbach, perdas localizadas por coeficientes K, queda de pressão total e a prática de campo que faz a linha funcionar.
 
 Una skill de agente trilingüe para **dimensionar y verificar tubería de vapor**: diámetro por velocidad, Reynolds, factor de fricción, pérdida distribuida de Darcy-Weisbach, pérdidas locales por coeficientes K, caída de presión total y la práctica de campo que hace funcionar la línea.
+
+## Sizing workflow
+
+![Six stages of steam piping sizing: input data, steam properties, preliminary diameter, flow regime, pressure losses and final verification](assets/images/sizing-workflow.png)
+
+The six stages summarize the detailed procedure in [the English skill](SKILL.md), [Português (BR)](SKILL.pt-BR.md) and [Español](SKILL.es.md). Use the written procedure and calculator for the actual checks, including erosion, Mach number and allowable pressure drop.
+
+## Industrial steam system
+
+![Conceptual industrial steam system with boiler, isolation valve, Y strainer, moisture separator, condensate drain, expansion loop, supports and control valve](assets/images/industrial-steam-system.png)
+
+Conceptual illustration, not to scale: component quantities, routing and support details do not define a construction design. The worked example specifies its own fittings and operating data: [English](examples/steam-8bar-2500kgh.en.md), [Português (BR)](examples/steam-8bar-2500kgh.pt-BR.md), [Español](examples/steam-8bar-2500kgh.es.md).
 
 ## Repository contents / Conteúdo / Contenido
 
@@ -30,14 +44,14 @@ A 10-step steam-pipe sizing procedure (system data → steam properties → volu
 ### Install as a skill
 
 ```bash
-git clone https://github.com/C48H74/dimensionamento-tubulacao-vapor.git \
-  ~/.agents/skills/dimensionamento-tubulacao-vapor
+git clone https://github.com/C48H74/steam-piping-sizing.git \
+  ~/.agents/skills/steam-piping-sizing
 ```
 
 Windows:
 
 ```powershell
-git clone https://github.com/C48H74/dimensionamento-tubulacao-vapor.git "$env:USERPROFILE\.agents\skills\dimensionamento-tubulacao-vapor"
+git clone https://github.com/C48H74/steam-piping-sizing.git "$env:USERPROFILE\.agents\skills\steam-piping-sizing"
 ```
 
 Then ask your agent something like *"size the steam line: 2,500 kg/h at 8 bar(g), 45 m, 6 long-radius elbows, 2 gate valves, 1 control valve, 1 Y-strainer and 1 moisture separator."*
@@ -77,7 +91,7 @@ Um procedimento de dimensionamento de linha de vapor em 10 etapas (dados do sist
 ### Instalar como skill
 
 ```powershell
-git clone https://github.com/C48H74/dimensionamento-tubulacao-vapor.git "$env:USERPROFILE\.agents\skills\dimensionamento-tubulacao-vapor"
+git clone https://github.com/C48H74/steam-piping-sizing.git "$env:USERPROFILE\.agents\skills\steam-piping-sizing"
 ```
 
 Depois peça ao agente algo como *"dimensione a linha de vapor: 2.500 kg/h a 8 bar(g), 45 m, 6 curvas de raio longo, 2 gavetas, 1 válvula de controle, 1 filtro Y e 1 separador de umidade"*.
@@ -117,14 +131,14 @@ Un procedimiento de dimensionamiento de línea de vapor en 10 pasos (datos del s
 ### Instalar como skill
 
 ```bash
-git clone https://github.com/C48H74/dimensionamento-tubulacao-vapor.git \
-  ~/.agents/skills/dimensionamento-tubulacao-vapor
+git clone https://github.com/C48H74/steam-piping-sizing.git \
+  ~/.agents/skills/steam-piping-sizing
 ```
 
 Windows:
 
 ```powershell
-git clone https://github.com/C48H74/dimensionamento-tubulacao-vapor.git "$env:USERPROFILE\.agents\skills\dimensionamento-tubulacao-vapor"
+git clone https://github.com/C48H74/steam-piping-sizing.git "$env:USERPROFILE\.agents\skills\steam-piping-sizing"
 ```
 
 Luego pida a su agente algo como *"dimensiona la línea de vapor: 2.500 kg/h a 8 bar(g), 45 m, 6 codos de radio largo, 2 válvulas de compuerta, 1 válvula de control, 1 filtro Y y 1 separador de humedad"*.

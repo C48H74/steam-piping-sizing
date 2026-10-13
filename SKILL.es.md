@@ -11,6 +11,10 @@ description: "Dimensionamiento y verificación de tubería de vapor: caudal más
 
 **Herramienta**: `tools/calc-vapor.mjs` (Node, sin dependencias) ejecuta la cadena completa y muestra cada etapa. Acepta `--lang en|pt|es` para seleccionar el idioma de salida.
 
+## Referencias visuales
+
+Para una visión ilustrada, consulte el [flujo de dimensionamiento](assets/images/sizing-workflow.png) y el [sistema de vapor industrial](assets/images/industrial-steam-system.png). Las imágenes en inglés son recursos conceptuales; utilice los procedimientos escritos, las tablas y la calculadora para decisiones numéricas. El esquema no es un diseño de construcción ni de soportación.
+
 ## Cómo usar
 - "Qué diámetro usar para este caudal de vapor" → framework 1.
 - "Cuál es la masa específica / el caudal volumétrico" → framework 2.
