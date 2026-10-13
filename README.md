@@ -14,13 +14,26 @@ Una skill de agente trilingüe para **dimensionar y verificar tubería de vapor*
 
 ![Six stages of steam piping sizing: input data, steam properties, preliminary diameter, flow regime, pressure losses and final verification](assets/images/sizing-workflow.png)
 
-The six stages summarize the detailed procedure in [the English skill](SKILL.md), [Português (BR)](SKILL.pt-BR.md) and [Español](SKILL.es.md). Use the written procedure and calculator for the actual checks, including erosion, Mach number and allowable pressure drop.
+The six stages summarize the procedure; see the corrected [design basis](references/design-basis.md) for dimensions, property provenance, criteria and model validity.
 
 ## Industrial steam system
 
 ![Conceptual industrial steam system with boiler, isolation valve, Y strainer, moisture separator, condensate drain, expansion loop, supports and control valve](assets/images/industrial-steam-system.png)
 
 Conceptual illustration, not to scale: component quantities, routing and support details do not define a construction design. The worked example specifies its own fittings and operating data: [English](examples/steam-8bar-2500kgh.en.md), [Português (BR)](examples/steam-8bar-2500kgh.pt-BR.md), [Español](examples/steam-8bar-2500kgh.es.md).
+
+## Coverage and verification
+
+- **47 catalog combinations:** DN6–DN600, Sch 40/80 where documented. Any other internal diameter via `--D`; any schedule/series via a sourced `--catalog`.
+- `--purg` adds steam demand; viscosity is required; sound speed uses `--a` or an explicit, labelled `--T` estimate.
+- `--dp-max`, `--Pout`, `--dp-pct` and `--V` control acceptance. No silently oversized/undersized fallback; failed checks return exit code 3.
+- `--json`, `--all`, `--list-sizes` and English/Portuguese/Spanish labels are available.
+- Consult [standards, sources and limits](references/design-basis.md). This is not ASME mechanical certification.
+
+```bash
+node tools/calc-vapor.mjs --list-sizes
+node --test tools/steam-core.test.mjs
+```
 
 ## Repository contents / Conteúdo / Contenido
 
@@ -29,7 +42,7 @@ Conceptual illustration, not to scale: component quantities, routing and support
 | Skill | [`SKILL.md`](SKILL.md) | [`SKILL.pt-BR.md`](SKILL.pt-BR.md) | [`SKILL.es.md`](SKILL.es.md) |
 | Reference tables | [`references/tables.en.md`](references/tables.en.md) | [`references/tabelas.pt-BR.md`](references/tabelas.pt-BR.md) | [`references/tablas.es.md`](references/tablas.es.md) |
 | Worked example | [`examples/steam-8bar-2500kgh.en.md`](examples/steam-8bar-2500kgh.en.md) | [`examples/steam-8bar-2500kgh.pt-BR.md`](examples/steam-8bar-2500kgh.pt-BR.md) | [`examples/steam-8bar-2500kgh.es.md`](examples/steam-8bar-2500kgh.es.md) |
-| Calculator | `tools/calc-vapor.mjs` — one file, all languages via `--lang en\|pt\|es` | | |
+| Calculator | `tools/calc-vapor.mjs` — CLI entrypoint, all languages via `--lang en\|pt\|es`; shared core and dimension catalog in `tools/` | | |
 
 The three skill documents are **equivalent translations**: same frameworks, same numbers, same tables. Read whichever you prefer; the calculator serves all three.
 
@@ -39,7 +52,7 @@ The three skill documents are **equivalent translations**: same frameworks, same
 
 ### What this is
 
-A 10-step steam-pipe sizing procedure (system data → steam properties → volumetric flow → diameter by velocity → Reynolds → Swamee-Jain friction factor → Darcy-Weisbach → K coefficients → total loss and ΔP → good practice), derived from a field calculation sheet and **completed with the verifications that sheet omits**: erosion limits, Mach number, allowable ΔP as a percentage of absolute pressure, unit traps, and an independent cross-check of the pressure drop.
+A steam-pipe hydraulic sizing procedure with simultaneous velocity and pressure-budget checks. Supports Sch 40/80 through DN600, any explicit bore and custom project catalogs; separates hydraulic criteria from mechanical code compliance.
 
 ### Install as a skill
 
@@ -59,7 +72,7 @@ Then ask your agent something like *"size the steam line: 2,500 kg/h at 8 bar(g)
 ### Use the calculator
 
 ```bash
-node tools/calc-vapor.mjs --lang en --m 2500 --rho 4.81 --mu 1.34e-5 --L 45 --eps 0.045 --K 14.1 --Pabs 9.013
+node tools/calc-vapor.mjs --lang en --m 2500 --rho 4.81 --mu 1.34e-5 --L 45 --eps 0.045 --K 14.1 --Pabs 9.013 --T 175
 ```
 
 `--lang` accepts `en` (default), `pt` or `es` and changes only the labels — the numbers are identical in all three.
@@ -67,7 +80,7 @@ node tools/calc-vapor.mjs --lang en --m 2500 --rho 4.81 --mu 1.34e-5 --L 45 --ep
 To force a known diameter (and reproduce an existing case), pass `--D` in mm:
 
 ```bash
-node tools/calc-vapor.mjs --m 2500 --rho 4.81 --L 45 --K 14.1 --Pabs 9.013 --D 77.9
+node tools/calc-vapor.mjs --m 2500 --rho 4.81 --mu 1.34e-5 --L 45 --K 14.1 --Pabs 9.013 --T 175 --D 77.9 --V 40
 ```
 
 Run with `--help` for every option. Density is **never** computed from P and T on purpose: take it from a steam table (`references/tables.en.md`).
@@ -86,7 +99,7 @@ All tables are **typical design values** — confirm against the project specifi
 
 ### O que é
 
-Um procedimento de dimensionamento de linha de vapor em 10 etapas (dados do sistema → propriedades do vapor → vazão volumétrica → diâmetro por velocidade → Reynolds → fator de atrito de Swamee-Jain → Darcy-Weisbach → coeficientes K → perda total e ΔP → boas práticas), derivado de uma folha de cálculo de campo e **completado com as verificações que ela não faz**: limite de erosão, número de Mach, ΔP admissível como porcentagem da pressão absoluta, armadilhas de unidade e uma conferência independente da perda de carga.
+Procedimento hidráulico com verificação simultânea de velocidade e pressão. Sch 40/80 até DN600, qualquer diâmetro interno e catálogos de projeto; critérios hidráulicos separados da conformidade mecânica.
 
 ### Instalar como skill
 
@@ -99,7 +112,7 @@ Depois peça ao agente algo como *"dimensione a linha de vapor: 2.500 kg/h a 8 b
 ### Usar a calculadora
 
 ```bash
-node tools/calc-vapor.mjs --lang pt --m 2500 --rho 4.81 --mu 1.34e-5 --L 45 --eps 0.045 --K 14.1 --Pabs 9.013
+node tools/calc-vapor.mjs --lang pt --m 2500 --rho 4.81 --mu 1.34e-5 --L 45 --eps 0.045 --K 14.1 --Pabs 9.013 --T 175
 ```
 
 `--lang` aceita `en` (padrão), `pt` ou `es` e altera apenas os rótulos — os números são idênticos nos três.
@@ -107,7 +120,7 @@ node tools/calc-vapor.mjs --lang pt --m 2500 --rho 4.81 --mu 1.34e-5 --L 45 --ep
 Para forçar um diâmetro conhecido (e reproduzir um caso existente), use `--D` em mm:
 
 ```bash
-node tools/calc-vapor.mjs --m 2500 --rho 4.81 --L 45 --K 14.1 --Pabs 9.013 --D 77.9
+node tools/calc-vapor.mjs --m 2500 --rho 4.81 --mu 1.34e-5 --L 45 --K 14.1 --Pabs 9.013 --T 175 --D 77.9 --V 40
 ```
 
 `--help` lista todas as opções. A massa específica **não** é calculada a partir de P e T de propósito: ela deve vir de tabela de vapor (`references/tabelas.pt-BR.md`).
@@ -126,7 +139,7 @@ As tabelas são **valores usuais de projeto** — confirme contra a especificaç
 
 ### Qué es
 
-Un procedimiento de dimensionamiento de línea de vapor en 10 pasos (datos del sistema → propiedades del vapor → caudal volumétrico → diámetro por velocidad → Reynolds → factor de fricción de Swamee-Jain → Darcy-Weisbach → coeficientes K → pérdida total y ΔP → buenas prácticas), derivado de una hoja de cálculo de campo y **completado con las verificaciones que esa hoja no hace**: límite de erosión, número de Mach, ΔP admisible como porcentaje de la presión absoluta, trampas de unidades y una comprobación independiente de la pérdida de carga.
+Procedimiento hidráulico con verificación simultánea de velocidad y presión. Sch 40/80 hasta DN600, cualquier diámetro interior y catálogos de proyecto; criterios hidráulicos separados de la conformidad mecánica.
 
 ### Instalar como skill
 
@@ -146,7 +159,7 @@ Luego pida a su agente algo como *"dimensiona la línea de vapor: 2.500 kg/h a 8
 ### Usar la calculadora
 
 ```bash
-node tools/calc-vapor.mjs --lang es --m 2500 --rho 4.81 --mu 1.34e-5 --L 45 --eps 0.045 --K 14.1 --Pabs 9.013
+node tools/calc-vapor.mjs --lang es --m 2500 --rho 4.81 --mu 1.34e-5 --L 45 --eps 0.045 --K 14.1 --Pabs 9.013 --T 175
 ```
 
 `--lang` acepta `en` (por defecto), `pt` o `es` y cambia solo las etiquetas — los números son idénticos en los tres.
@@ -154,7 +167,7 @@ node tools/calc-vapor.mjs --lang es --m 2500 --rho 4.81 --mu 1.34e-5 --L 45 --ep
 Para forzar un diámetro conocido (y reproducir un caso existente), use `--D` en mm:
 
 ```bash
-node tools/calc-vapor.mjs --m 2500 --rho 4.81 --L 45 --K 14.1 --Pabs 9.013 --D 77.9
+node tools/calc-vapor.mjs --m 2500 --rho 4.81 --mu 1.34e-5 --L 45 --K 14.1 --Pabs 9.013 --T 175 --D 77.9 --V 40
 ```
 
 `--help` lista todas las opciones. La densidad **no** se calcula a partir de P y T a propósito: debe tomarse de una tabla de vapor (`references/tablas.es.md`).
