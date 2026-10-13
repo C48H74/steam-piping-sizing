@@ -4,6 +4,10 @@
 
 Reference case from the original sheet of this procedure, **recalculated** with the tool `tools/calc-steam.mjs`. All the numbers below come from the same calculation chain and are reproducible.
 
+![Industrial steam system: boiler, valves, Y strainer, moisture separator, condensate drain and expansion loop](../assets/images/industrial-steam-system.png)
+
+Conceptual system illustration, not to scale. Fitting quantities and operating data are defined in the table below; the sketch does not specify the routing or support design.
+
 ## System data
 
 | Item | Value |

@@ -11,6 +11,10 @@ description: "Dimensionamento e verificação de tubulação de vapor: vazão m�
 
 **Ferramenta**: `tools/calc-steam.mjs` (Node, sem dependências) executa a cadeia inteira e mostra cada etapa.
 
+## Referências visuais
+
+Para uma visão ilustrada, consulte o [fluxo de dimensionamento](assets/images/sizing-workflow.png) e o [sistema de vapor industrial](assets/images/industrial-steam-system.png). As imagens em inglês são recursos conceituais; use os procedimentos escritos, as tabelas e a calculadora para decisões numéricas. O esquema não é um projeto de construção ou de suportação.
+
 ## Como usar
 - "Que diâmetro usar para essa vazão de vapor" → framework 1.
 - "Qual a massa específica / a vazão volumétrica" → framework 2.

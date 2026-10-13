@@ -4,6 +4,10 @@
 
 Caso de referência da folha de origem deste procedimento, **recalculado** com a ferramenta `tools/calc-steam.mjs`. Todos os números abaixo saem da mesma cadeia de cálculo e são reproduzíveis.
 
+![Industrial steam system: boiler, valves, Y strainer, moisture separator, condensate drain and expansion loop](../assets/images/industrial-steam-system.png)
+
+Ilustração conceitual do sistema, sem escala e com textos em inglês. As quantidades de acessórios e os dados operacionais são definidos na tabela abaixo; o esquema não especifica o arranjo nem o projeto de suportação.
+
 ## Dados do sistema
 
 | Dado | Valor |

@@ -11,6 +11,10 @@ description: "Steam piping sizing and verification: mass and volumetric flow, di
 
 **Tool**: `tools/calc-steam.mjs` (Node, no dependencies) runs the entire chain and shows each step. It accepts `--lang en|pt|es` to select the output language.
 
+## Visual references
+
+For an illustrated overview, see the [sizing workflow](assets/images/sizing-workflow.png) and [industrial steam system](assets/images/industrial-steam-system.png). These English-language images are conceptual aids; use the written frameworks, tables and calculator for numerical decisions. The system sketch is not a construction or support design.
+
 ## How to use
 - "What diameter should I use for this steam flow" → framework 1.
 - "What is the specific mass / the volumetric flow" → framework 2.

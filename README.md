@@ -1,4 +1,6 @@
-# steam-piping-sizing
+# Steam Piping Sizing
+
+![Steam piping sizing cover showing a boiler, valves, strainer, moisture separator and expansion loop](assets/images/steam-piping-sizing-cover.png)
 
 **Languages:** English · [Português (BR)](#português-br) · [Español](#español)
 
@@ -7,6 +9,18 @@ A trilingual agent skill for **sizing and verifying steam piping**: diameter fro
 Uma skill de agente trilíngue para **dimensionar e verificar tubulação de vapor**: diâmetro por velocidade, Reynolds, fator de atrito, perda distribuída de Darcy-Weisbach, perdas localizadas por coeficientes K, queda de pressão total e a prática de campo que faz a linha funcionar.
 
 Una skill de agente trilingüe para **dimensionar y verificar tubería de vapor**: diámetro por velocidad, Reynolds, factor de fricción, pérdida distribuida de Darcy-Weisbach, pérdidas locales por coeficientes K, caída de presión total y la práctica de campo que hace funcionar la línea.
+
+## Sizing workflow
+
+![Six stages of steam piping sizing: input data, steam properties, preliminary diameter, flow regime, pressure losses and final verification](assets/images/sizing-workflow.png)
+
+The six stages summarize the detailed procedure in [the English skill](SKILL.md), [Português (BR)](SKILL.pt-BR.md) and [Español](SKILL.es.md). Use the written procedure and calculator for the actual checks, including erosion, Mach number and allowable pressure drop.
+
+## Industrial steam system
+
+![Conceptual industrial steam system with boiler, isolation valve, Y strainer, moisture separator, condensate drain, expansion loop, supports and control valve](assets/images/industrial-steam-system.png)
+
+Conceptual illustration, not to scale: component quantities, routing and support details do not define a construction design. The worked example specifies its own fittings and operating data: [English](examples/steam-8bar-2500kgh.en.md), [Português (BR)](examples/steam-8bar-2500kgh.pt-BR.md), [Español](examples/steam-8bar-2500kgh.es.md).
 
 ## Repository contents / Conteúdo / Contenido
 
