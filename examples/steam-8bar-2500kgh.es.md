@@ -41,9 +41,9 @@ For explicit D=77.9 mm: Q=0.144375 m³/s; V≈30.291 m/s; Re≈8.470e5. Colebroo
 ## Reproduce
 
 ```bash
-node tools/calc-vapor.mjs --m 2500 --rho 4.81 --mu 1.34e-5 --L 45 --eps 0.045 --K 14.1 --Pabs 9.013 --T 175 --lang es --all
-node tools/calc-vapor.mjs --m 2500 --rho 4.81 --mu 1.34e-5 --L 45 --eps 0.045 --K 14.1 --Pabs 9.013 --T 175 --D 77.9 --V 40 --lang es
-node tools/calc-vapor.mjs --m 2500 --rho 4.81 --mu 1.34e-5 --L 45 --eps 0.045 --K 14.1 --Pabs 9.013 --T 175 --D 77.9 --V 40 --dp-max 0.5 --lang es
+node tools/calc-steam.mjs --m 2500 --rho 4.81 --mu 1.34e-5 --L 45 --eps 0.045 --K 14.1 --Pabs 9.013 --T 175 --lang es --all
+node tools/calc-steam.mjs --m 2500 --rho 4.81 --mu 1.34e-5 --L 45 --eps 0.045 --K 14.1 --Pabs 9.013 --T 175 --D 77.9 --V 40 --lang es
+node tools/calc-steam.mjs --m 2500 --rho 4.81 --mu 1.34e-5 --L 45 --eps 0.045 --K 14.1 --Pabs 9.013 --T 175 --D 77.9 --V 40 --dp-max 0.5 --lang es
 ```
 
 The last command deliberately returns exit code 3 (FAIL). See [design basis](../references/design-basis.md).

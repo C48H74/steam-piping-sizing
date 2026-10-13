@@ -44,7 +44,7 @@ No hidden temperature or viscosity defaults. Missing Mach/pressure => PRELIMINAR
 Not mechanical ASME certification, wall thickness, flexibility, two-phase or transients.
 See references/design-basis.md for sources and custom catalog schema.
 Example:
-node tools/calc-vapor.mjs --m 2500 --rho 4.81 --mu 1.34e-5 --L 45 --K 14.1 --Pabs 9.013 --T 175 --all
+node tools/calc-steam.mjs --m 2500 --rho 4.81 --mu 1.34e-5 --L 45 --K 14.1 --Pabs 9.013 --T 175 --all
 `);}
 function main(){
  const o=parse(process.argv.slice(2)),lang=o.lang??'en';
@@ -58,7 +58,7 @@ function main(){
  }
  const r=calculate(o,catalog),s=r.selected,w=labels[lang];
  if(o.json)console.log(JSON.stringify(r,null,2));else {
-  const fmt=(x,n=4)=>x===null?'N/A':x.toLocaleString({en:'en-US',pt:'pt-BR',es:'es-ES'}[lang],{maximumFractionDigits:n});
+  const fmt=(x,n=4)=>x===null?'N/A':x.toLocaleString('en-US',{maximumFractionDigits:n});
   const kv=(k,v)=>console.log(`${k} = ${v}`);
   console.log(w[0]);kv(w[1],`${fmt(r.massFlowKgH)} kg/h`);kv('Qv',`${fmt(r.Qs,6)} m3/s`);kv(w[2],`${fmt(r.DreqMm)} mm`);kv(w[9],r.status);
   if(s){

@@ -31,7 +31,7 @@ Conceptual illustration, not to scale: component quantities, routing and support
 - Consult [standards, sources and limits](references/design-basis.md). This is not ASME mechanical certification.
 
 ```bash
-node tools/calc-vapor.mjs --list-sizes
+node tools/calc-steam.mjs --list-sizes
 node --test tools/steam-core.test.mjs
 ```
 
@@ -40,9 +40,9 @@ node --test tools/steam-core.test.mjs
 | Content | English | Português (BR) | Español |
 |---|---|---|---|
 | Skill | [`SKILL.md`](SKILL.md) | [`SKILL.pt-BR.md`](SKILL.pt-BR.md) | [`SKILL.es.md`](SKILL.es.md) |
-| Reference tables | [`references/tables.en.md`](references/tables.en.md) | [`references/tabelas.pt-BR.md`](references/tabelas.pt-BR.md) | [`references/tablas.es.md`](references/tablas.es.md) |
+| Reference tables | [`references/tables.en.md`](references/tables.en.md) | [`references/tables.pt-BR.md`](references/tables.pt-BR.md) | [`references/tables.es.md`](references/tables.es.md) |
 | Worked example | [`examples/steam-8bar-2500kgh.en.md`](examples/steam-8bar-2500kgh.en.md) | [`examples/steam-8bar-2500kgh.pt-BR.md`](examples/steam-8bar-2500kgh.pt-BR.md) | [`examples/steam-8bar-2500kgh.es.md`](examples/steam-8bar-2500kgh.es.md) |
-| Calculator | `tools/calc-vapor.mjs` — CLI entrypoint, all languages via `--lang en\|pt\|es`; shared core and dimension catalog in `tools/` | | |
+| Calculator | `tools/calc-steam.mjs` — CLI entrypoint, all languages via `--lang en\|pt\|es`; shared core and dimension catalog in `tools/` | | |
 
 The three skill documents are **equivalent translations**: same frameworks, same numbers, same tables. Read whichever you prefer; the calculator serves all three.
 
@@ -72,7 +72,7 @@ Then ask your agent something like *"size the steam line: 2,500 kg/h at 8 bar(g)
 ### Use the calculator
 
 ```bash
-node tools/calc-vapor.mjs --lang en --m 2500 --rho 4.81 --mu 1.34e-5 --L 45 --eps 0.045 --K 14.1 --Pabs 9.013 --T 175
+node tools/calc-steam.mjs --lang en --m 2500 --rho 4.81 --mu 1.34e-5 --L 45 --eps 0.045 --K 14.1 --Pabs 9.013 --T 175
 ```
 
 `--lang` accepts `en` (default), `pt` or `es` and changes only the labels — the numbers are identical in all three.
@@ -80,7 +80,7 @@ node tools/calc-vapor.mjs --lang en --m 2500 --rho 4.81 --mu 1.34e-5 --L 45 --ep
 To force a known diameter (and reproduce an existing case), pass `--D` in mm:
 
 ```bash
-node tools/calc-vapor.mjs --m 2500 --rho 4.81 --mu 1.34e-5 --L 45 --K 14.1 --Pabs 9.013 --T 175 --D 77.9 --V 40
+node tools/calc-steam.mjs --m 2500 --rho 4.81 --mu 1.34e-5 --L 45 --K 14.1 --Pabs 9.013 --T 175 --D 77.9 --V 40
 ```
 
 Run with `--help` for every option. Density is **never** computed from P and T on purpose: take it from a steam table (`references/tables.en.md`).
@@ -112,7 +112,7 @@ Depois peça ao agente algo como *"dimensione a linha de vapor: 2.500 kg/h a 8 b
 ### Usar a calculadora
 
 ```bash
-node tools/calc-vapor.mjs --lang pt --m 2500 --rho 4.81 --mu 1.34e-5 --L 45 --eps 0.045 --K 14.1 --Pabs 9.013 --T 175
+node tools/calc-steam.mjs --lang pt --m 2500 --rho 4.81 --mu 1.34e-5 --L 45 --eps 0.045 --K 14.1 --Pabs 9.013 --T 175
 ```
 
 `--lang` aceita `en` (padrão), `pt` ou `es` e altera apenas os rótulos — os números são idênticos nos três.
@@ -120,10 +120,10 @@ node tools/calc-vapor.mjs --lang pt --m 2500 --rho 4.81 --mu 1.34e-5 --L 45 --ep
 Para forçar um diâmetro conhecido (e reproduzir um caso existente), use `--D` em mm:
 
 ```bash
-node tools/calc-vapor.mjs --m 2500 --rho 4.81 --mu 1.34e-5 --L 45 --K 14.1 --Pabs 9.013 --T 175 --D 77.9 --V 40
+node tools/calc-steam.mjs --m 2500 --rho 4.81 --mu 1.34e-5 --L 45 --K 14.1 --Pabs 9.013 --T 175 --D 77.9 --V 40
 ```
 
-`--help` lista todas as opções. A massa específica **não** é calculada a partir de P e T de propósito: ela deve vir de tabela de vapor (`references/tabelas.pt-BR.md`).
+`--help` lista todas as opções. A massa específica **não** é calculada a partir de P e T de propósito: ela deve vir de tabela de vapor (`references/tables.pt-BR.md`).
 
 ### Escopo e limites
 
@@ -159,7 +159,7 @@ Luego pida a su agente algo como *"dimensiona la línea de vapor: 2.500 kg/h a 8
 ### Usar la calculadora
 
 ```bash
-node tools/calc-vapor.mjs --lang es --m 2500 --rho 4.81 --mu 1.34e-5 --L 45 --eps 0.045 --K 14.1 --Pabs 9.013 --T 175
+node tools/calc-steam.mjs --lang es --m 2500 --rho 4.81 --mu 1.34e-5 --L 45 --eps 0.045 --K 14.1 --Pabs 9.013 --T 175
 ```
 
 `--lang` acepta `en` (por defecto), `pt` o `es` y cambia solo las etiquetas — los números son idénticos en los tres.
@@ -167,10 +167,10 @@ node tools/calc-vapor.mjs --lang es --m 2500 --rho 4.81 --mu 1.34e-5 --L 45 --ep
 Para forzar un diámetro conocido (y reproducir un caso existente), use `--D` en mm:
 
 ```bash
-node tools/calc-vapor.mjs --m 2500 --rho 4.81 --mu 1.34e-5 --L 45 --K 14.1 --Pabs 9.013 --T 175 --D 77.9 --V 40
+node tools/calc-steam.mjs --m 2500 --rho 4.81 --mu 1.34e-5 --L 45 --K 14.1 --Pabs 9.013 --T 175 --D 77.9 --V 40
 ```
 
-`--help` lista todas las opciones. La densidad **no** se calcula a partir de P y T a propósito: debe tomarse de una tabla de vapor (`references/tablas.es.md`).
+`--help` lista todas las opciones. La densidad **no** se calcula a partir de P y T a propósito: debe tomarse de una tabla de vapor (`references/tables.es.md`).
 
 ### Alcance y límites
 

@@ -28,9 +28,9 @@ The catalog is a supported subset, not every combination in every standard. Use 
 Required row fields: positive finite `dn`, positive finite `idMm`, nonempty string `schedule` and `source`. Optional `odMm` and `wallMm` must both be present, positive and agree with ID within 0.11 mm (rounded bore tolerance). Duplicate DN/schedule pairs are rejected. Use full provenance, not the illustrative source descriptions above.
 
 ```bash
-node tools/calc-vapor.mjs --list-sizes
-node tools/calc-vapor.mjs --list-sizes --schedule 80 --json
-node tools/calc-vapor.mjs --m 2500 --rho 4.81 --mu 1.34e-5 --L 45 --K 14.1 --Pabs 9.013 --T 175 --catalog project.json --schedule project --all
+node tools/calc-steam.mjs --list-sizes
+node tools/calc-steam.mjs --list-sizes --schedule 80 --json
+node tools/calc-steam.mjs --m 2500 --rho 4.81 --mu 1.34e-5 --L 45 --K 14.1 --Pabs 9.013 --T 175 --catalog project.json --schedule project --all
 ```
 
 ## Model and acceptance

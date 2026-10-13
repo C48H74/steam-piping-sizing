@@ -30,9 +30,9 @@ Use para avaliação hidráulica preliminar de vapor monofásico. Confirme o est
 ## Calculator
 
 ```bash
-node tools/calc-vapor.mjs --m 2500 --rho 4.81 --mu 1.34e-5 --L 45 --eps 0.045 --K 14.1 --Pabs 9.013 --T 175 --lang pt --all
-node tools/calc-vapor.mjs --list-sizes
-node tools/calc-vapor.mjs --help
+node tools/calc-steam.mjs --m 2500 --rho 4.81 --mu 1.34e-5 --L 45 --eps 0.045 --K 14.1 --Pabs 9.013 --T 175 --lang pt --all
+node tools/calc-steam.mjs --list-sizes
+node tools/calc-steam.mjs --help
 ```
 
 Read [design basis and catalog schema](references/design-basis.md) before selecting criteria or using a custom catalog. Review the [worked example](examples/steam-8bar-2500kgh.pt-BR.md) to distinguish a historical bore from automatic selection.
